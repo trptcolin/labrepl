@@ -96,7 +96,7 @@
   (GET
    "/browse/*"
    request
-   (let [[ns var] (str/split (get-in request [:params "*"]) #"/")]
+   (let [[ns var] (str/split (get-in request [:params :*]) #"/")]
      (html
       (layout
        (namespace-browser (namespace-names))
