@@ -2,6 +2,7 @@
   :description "Clojure exercises, with integrated repl and webapp"
   :dependencies [[org.clojure/clojure "1.2.1"]
                  [compojure "0.6.2"]
+                 [ring/ring-devel "0.2.5"]
                  [ring/ring-jetty-adapter "0.3.7"]
                  [hiccup "0.3.4"]
                  [postgresql "9.0-801.jdbc4"]

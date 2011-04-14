@@ -5,9 +5,16 @@
 
 (defn all
   []
-  [:intro :names-and-places :its-all-data :looping :project-euler
-   :mini-browser :unified-update-model :zero-sum  :cellular-automata
-   :defstrict :rock-paper-scissors])
+  [:names-and-places :looping :rock-paper-scissors
+   :project-euler :unified-update-model])
+
+(defn review
+  []
+  [:intro :its-all-data])
+
+(defn optional
+  []
+  [:mini-browser :zero-sum :cellular-automata :defstrict])
 
 (defn lab-url
   [lab-name]

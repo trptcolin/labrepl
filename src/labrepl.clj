@@ -6,9 +6,10 @@
         hiccup.core
         hiccup.page-helpers
         ring.adapter.jetty
+        [ring.middleware.reload :only [wrap-reload]]
         clojure.contrib.logging)
   (:require [compojure.route :as route]
-            [labrepl.lab :as lab]
+            [labrepl.lab :as lab] :reload
             [solutions.mini-browser :as mini-browser]))
 
 (defn with-logging [handler]
@@ -23,13 +24,22 @@
         response))))
 
 (defroutes lab-routes
-  (GET "/" [] (html
-               (lab/layout
-                [:h2.logo "Clojure Labs"]
-                [:ul
-                 (map
-                  (fn [lab] [:li (lab/make-url lab)])
-                  (lab/all))])))
+  (GET "/" [] (let [show-labs (fn [labs]
+                                (map (fn [lab] [:li (lab/make-url lab)])
+                                     labs))]
+               (html
+                (lab/layout
+                 [:h2.logo "Clojure Labs"]
+                 [:h3 "Core labs"]
+                 [:ul
+                  (show-labs (lab/all))]
+                 [:h3 "Choose your own adventure"]
+                 [:ul
+                  (show-labs (lab/optional))]
+                 [:h3 "Extras (mostly review)"]
+                 [:ul
+                  (show-labs (lab/review))]
+                  ))))
   (GET "/labs/:name" [name] (html
                              (lab/layout
                               [:h2 name]
@@ -39,7 +49,9 @@
   (route/files "/")
   (route/not-found "<h1>Not Found</h1>"))
 
-(def full-routes (-> lab-routes with-logging))
+(def full-routes (-> lab-routes
+                     (wrap-reload '[labrepl])
+                     with-logging))
 
 (defroutes app
   (routes full-routes static-routes))
